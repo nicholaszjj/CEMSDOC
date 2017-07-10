@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	     <link rel="stylesheet" href="plugins/wangEditor/wangEditor.css" />
+			<script type="text/javascript" src="js/public.js" ></script>
+			<script src="plugins/wangEditor/wangEditor.js"></script>
+			<!--<script src="plugins/ckEditor/ckeditor.js"></script>-->
+		<script>
+		var editor
+			 $(function(){
+			 	$("body").height($(window).height());
+			 	
+			 	
+			 		    var E = window.wangEditor
+        editor = new E('#toolbar')  // 两个参数也可以传入 elem 对象，class 选择器
+        editor.create();
+   	$.post("/getTopMenus",function(res){
+   		if(res.length>0){
+   			$.each(res,function(i,v){
+   				
+   				
+   				$("#apiTypeSelect").append('<option data-type="'+v.flag+'"  value="'+v.flag+'">'+v.name+'</option>')
+   				
+   			})
+   		}
+   		
+   		
+   	})
+   	
+			 
+			 })
+			 
+			 function add(){
+			 	var content=editor.txt.html();
+			 	$("#editorC").val(content);
+			 	$.get("/addDoc",$("form").serialize(),function(res){
+			 		
+			 			if(res=="success"){ 
+			 				
+			 				
+			 					var index = parent.layer.getFrameIndex(window.name);
+				
+					 	 parent.$('#table').bootstrapTable("refresh");
+			 				parent.layer.msg("保存成功")
+			 			parent.layer.close(index);
+			 			
+			 			
+			 			}else{
+              		layer.msg("保存失败")
+              	};
+			 		
+			 	}
+			 	)
+			 	
+			 }
+			 
+			 
+			 function reset(){
+			 	$("#name").val("");
+			 	editor.txt.clear();
+			 	
+			 	
+			 }
+			 </script>
+	</head>
+	
+	<body>
+		<div class="container" style="padding-top:20px;">
+		<form role="form" class="form-horizontal">
+			
+	<div class="form-group">
+    <label for="name" class="col-md-2 col-md-offset-1 control-label">文档标题</label>
+    <div class="col-md-6">
+    <input class="form-control"  name="name" id="name"/>
+
+    </div>	
+   </div>
+  <div class="form-group">
+    <label for="name" class="col-md-2 col-md-offset-1 control-label">文档类型</label>
+    <div class="col-md-6">
+    <select class="form-control" id="apiTypeSelect" name="flag">
+ 
+    </select>
+    </div>
+   </div>
+   <div class="form-group">
+   	<input type="hidden" name="content"  id="editorC"/>
+   	 <label for="name" class="col-md-2 col-md-offset-1 control-label">文档内容</label>
+			<div id="toolbar" class="col-md-8" style="">
+				
+				
+			</div>							
+				
+		</div>
+		 <div class="form-group">
+		 	<div class="col-md-offset-3  col-md-6">
+		<a  class="btn btn-primary" onclick="reset()">重置</a>	
+					</div>	
+				
+		</div>
+    
+</form>
+
+		</div>
+		
+		
+		
+	</body>
+</html>

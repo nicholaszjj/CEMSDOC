@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title><%=title%></title>
+		<script type="text/javascript" src="js/public.js" ></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  
+    <link rel="stylesheet" type="text/css" href="/css/syntax.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script>
+    	
+    	$(function(){
+    	
+	   setTimeout(
+	  function(){
+    var mainheight = $(window).height()-60;
+    $("#mainiframe").height(mainheight)
+	  	
+	  } ,200)
+    	
+    $.post("/getTopMenus",function(res){
+    	var html="";
+    	$.each(res, function(i,v) {
+    		if(v.flag=="0"){
+    			html+='<li class="active" data-type="'+v.flag+'"><a  href="javascript:;"  ><i class="fa fa-'+v.icon+'"></i>'+v.name+'</a></li> '
+    		}else{
+    		  html+='<li data-type="'+v.flag+'"><a  href="javascript:;"  ><i class="fa fa-'+v.icon+'"></i>'+v.name+'</a></li> '
+    	}
+    		
+    		});
+    	$("#centerNav").append(html);
+    	$("#centerNav ").on("click","li",function(){
+   			$(this).addClass("active").siblings("li").removeClass("active");
+   			var flag=$(this).data("type");
+   			var url="/docUI?flag="+flag;
+   			$("#mainiframe").attr("src",url);
+  
+   		})
+   		
+    	
+    	 	$("#right_ul ").on("click","a",function(){
+   			var url=$(this).data("url");
+   			$("#mainiframe").attr("src",url);
+			
+   			
+   		})
+    })
+
+    });
+   	
+    </script>
+</head>
+
+<body>
+    <div id="wrapper">
+        <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand logo" href="javascript:;">
+                <span class="fa fa-cloud-upload"></span><%=title%></a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav" id="centerNav">      
+            </ul>
+
+             <ul class="nav navbar-nav navbar-right">
+               <!-- <li><a target="_blank" href="/">后台操作</a></li>-->
+                
+                 <li class="dropdown">
+                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                                                        后台操作
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu" id="right_ul">
+                    <li><a href="javascript:;" data-url="/topmenulistUI">顶部菜单编辑</a></li>            
+                    <li class="divider"></li>
+                   <li><a href="javascript:;" data-url="/doclistUI">编写文档</a></li>
+                </ul>
+            </li>
+            </ul>
+        </div>
+        <!-- /.nav-collapse -->
+    </div>
+    <!-- /.container -->
+</div>
+<!-- /.navbar -->
+
+<div class="page-body">
+
+<iframe   id="mainiframe" src="/docUI?flag=0" frameborder="0"  width="100%"  height="100%"></iframe>
+
+</div>
+<!--div id="footer" class="footer footer-fixed-bottom">
+    <div class="footer-inner container">
+        <div class="row">
+            <div class="col-md-12">
+                <p class="copyright"><%=title%>由<a href="https://hr.vrv.com.cn">VRV</a>内网团队负责维护</p>
+                <p>&copy;2017-2018 VRV内网团队负责维护</p>
+            </div>
+        </div>
+    </div>
+</div>-->
+   </div>
+</body>
+</html>

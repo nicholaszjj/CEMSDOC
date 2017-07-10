@@ -1,0 +1,14 @@
+document.write('<link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css" />');
+document.write('<link rel="stylesheet" href="plugins/bootstrap/css/bootstrap-theme.min.css" />');
+document.write('<link rel="stylesheet" href="plugins/bootstrapTable/bootstrap-table.css" />');
+document.write('<link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css" />');
+document.write('<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>');
+document.write('<script type="text/javascript" src="plugins/layer/layer.js"></script>');
+document.write('<script type="text/javascript" src="plugins/bootstrap/js/bootstrap.min.js"></script>'); 
+document.write('<script type="text/javascript" src="plugins/jquery-ui/jquery-ui.min.js"></script>');
+document.write('<script type="text/javascript" src="plugins/bootstrapTable/bootstrap-table.min.js"></script>');
+document.write('<script type="text/javascript" src="plugins/bootstrapTable/bootstrap-table-editable.min.js"></script>');
+document.write('<script type="text/javascript" src="plugins/bootstrapTable/bootstrap-editable.js"></script>');
+document.write('<script type="text/javascript" src="plugins/bootstrapTable/bootstrap-table-zh-CN.js"></script>');
+document.write('<script type="text/javascript" src="plugins/bootstrapTable/bootstrap-table-export.js"></script>');
+document.write('<script type="text/javascript" src="plugins/bootstrapTable/tableExport.js"></script>');

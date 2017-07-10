@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+<script type="text/javascript" src="js/public.js" ></script>
+<link rel="stylesheet" type="text/css" href="/css/syntax.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+	</head>
+	<script>
+		$(function(){
+    initTable()
+	});
+//加载表格
+ function initTable() {
+    	 var $table = $('#table');
+    	 	 $table.bootstrapTable.locales['zh-CN'];
+        $table.bootstrapTable({
+           method:'POST',
+        dataType:'json',
+        toolbar:"#toolbar",
+        contentType: "application/x-www-form-urlencoded",
+        cache: false,
+        striped: true,                              //是否显示行间隔色
+        sidePagination: "client",           //分页方式：client客户端分页，server服务端分页（*）
+      url:"/getDocs?flag=0",
+        height:$(window).height()-10,
+        width:$(window).width(),
+        showColumns:true,
+        pagination:true,
+    /*    queryParams : queryParams,*/
+        minimumCountColumns:2,
+        pageNumber:1,                       //初始化加载第一页，默认第一页
+               pageSize: 5,                       //每页的记录行数（*）
+              pageList: [5, 25, 50, 100],        //可供选择的每页的行数（*）
+              uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+        showExport: true,                    
+        exportDataType: 'all',
+        search:true,
+   /*     responseHandler: responseHandler,*/
+            columns: [
+                    {
+                        field: 'state',
+                        checkbox: true
+                        
+                    }, {
+                        title: 'id',
+                        field: 'id',
+                        visible:false
+
+                    }, {
+                        title: 'name',
+                         field: 'name',
+                         editable: true
+
+                    },
+              
+                    {
+                        field: 'content',
+                        title: 'content',
+                        visible:false
+
+                    }, 
+                     {
+                        field: 'flag',
+                        title: 'flag',
+                      editable:  {
+                    type: 'select',
+                    title: '选择类型',
+                     mode: "popup", //编辑框的模式：支持popup和inline两种模式，默认是popup
+                  /*  source:[{value:"jqgrid",text:"jqgrid"},{value:"upload",text:"upload"}]*/
+                    source: function () {
+                        var result = [];
+                        $.ajax({
+                            url: '/getTopMenus',
+                            async: false,
+                            type: "get",
+                            data: {},
+                            success: function (data, status) {
+                                $.each(data, function (key, value) {
+                                    result.push({ value: value.flag, text: value.name });
+                                });
+                            }
+                        });
+                        return result;
+                    }
+                }
+                    },
+                    {
+                        field: '操作',
+                        title: '操作',
+                        formatter:function(value, row, index) {
+        return '<a class="mod" ><i class="glyphicon glyphicon-pencil"></i></a> ' + '<a class="delete"><i class="glyphicon glyphicon-remove"></i></a>';
+                       },
+               /*        onEditableSave: function (field, row, oldValue, $el) {
+                $.ajax({
+                    type: "post",
+                    url: "/Editable/Edit",
+                    data: row,
+                    dataType: 'JSON',
+                    success: function (data, status) {
+                        if (status == "success") {
+                            alert('提交数据成功');
+                        }
+                    },
+                    error: function () {
+                        alert('编辑失败');
+                    },
+                    complete: function () {
+
+                    }
+
+                });
+            },*/
+                       events:{
+         'click .mod': function(e, value, row, index) {      
+              //修改操作
+                 $.get("/updateDoc",{id:row.id,name:row.name,content:row.content,flag:row.flag},function(res){
+              	if(res=="success"){layer.msg("保存成功")}else{
+              		layer.msg("保存失败")
+              	};
+              	$('#table').bootstrapTable("refresh");
+              })
+            },
+          'click .delete' : function(e, value, row, index) {   
+              //删除操作 
+              $.get("/deleteDoc",{id:row.id},function(res){
+              	if(res=="success"){layer.msg("删除成功")}else{
+              		layer.msg("删除失败")
+              	};
+              	$('#table').bootstrapTable("refresh");
+              })
+            }
+        }
+
+                    }
+                ]
+           
+        });
+        
+
+        // sometimes footer render error.
+        setTimeout(function () {
+            $table.bootstrapTable('resetView');
+        }, 200);
+     
+        $(window).resize(function () {
+            $table.bootstrapTable('resetView', {
+                height: $(window).height()-200
+            });
+        });
+    }
+// 用于server 分页，表格数据量太大的话 不想一次查询所有数据，可以使用server分页查询，数据量小的话可以直接把sidePagination: "server"  改为 sidePagination: "client" ，同时去掉responseHandler: responseHandler就可以了，
+function responseHandler(res) { 
+    if (res) {
+        return {
+            "rows" : res.result,
+            "total" : res.totalCount
+        };
+    } else {
+        return {
+            "rows" : [],
+            "total" : 0
+        };
+    }
+   
+    
+	}
+		 
+		function add(){
+	layer.open({
+	type: 2,
+      title: '添加文档',
+     shadeClose: true,
+     shade: 0.8,
+     maxmin: true, //开启最大化最小化按钮
+     area: ['100%', '100%'],
+      content:"/addDocUI",
+       btn: ['确定','取消'],
+    yes: function(index,layero){
+    	window[layero.find('iframe')[0]['name']].add(); 
+    	
+    }, no: function(){
+      layer.msg('取消', {icon: 5});
+    }
+			})
+			
+			
+		}
+		
+		
+			 
+		function edit(){
+			
+			var data= $('#table').bootstrapTable('getSelections');
+			if(data.length==1){
+			
+	layer.open({
+	type: 2,
+      title: '编辑文档',
+     shadeClose: true,
+     shade: 0.8,
+     maxmin: true, //开启最大化最小化按钮
+     area: ['100%', '100%'],
+      content:"/updateDocUI",
+       btn: ['确定','取消'],
+    yes: function(index,layero){
+    	window[layero.find('iframe')[0]['name']].edit(); 
+    	
+    }, no: function(){
+      layer.msg('取消', {icon: 5});
+    }
+			})
+			
+				}else if(data.length>1){
+					
+					layer.msg('仅能选择一条数据！', {icon: 5});
+					
+				}else{
+					layer.msg('请选择一条数据！', {icon: 5});
+				}
+		}
+		
+	</script>
+	<body style="margin:0;">
+		<div class="container">
+        <div id="toolbar">
+        <a id="addBtn" class="btn btn-primary"  onclick="add()">
+         <i  class="glyphicon glyphicon-plus">添加</i>	
+        </a>
+        <a id="addBtn" class="btn btn-primary"  onclick="edit()">
+         <i  class="glyphicon glyphicon-pencil">编辑</i>	
+        </a>
+    </div>		
+		<table id="table"></table>
+				
+  </div>
+		</body>
+</html>
