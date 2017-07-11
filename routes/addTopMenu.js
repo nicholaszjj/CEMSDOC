@@ -25,14 +25,14 @@ var addTopMenu= function(req, res, next) {
       var addSqlParams = [id, params.name, params.icon,params.flag];
     //加
     connection.query(sql,addSqlParams,function (err, result) {
-    	var msg="success";
+    	var msg="filed";
         if(err){
           console.log('[SELECT ERROR] - ',err.message);
           return;
-        }
-        if(result.length>0){
+        }else{
         	msg="success";
         }
+       
        res.send(msg);
     });
 };
