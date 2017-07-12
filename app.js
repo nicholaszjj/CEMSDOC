@@ -12,7 +12,7 @@ app.engine('.html', require('ejs').__express);
 app.set('view engine', 'html'); 
 app.use(express.favicon());
 app.use(express.logger('dev'));
-app.use(express.bodyParser());
+app.use(express.bodyParser({uploadDir:"public/docs", keepExtensions : true, limit:100000000, defer:true }));
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));

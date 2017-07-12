@@ -3,9 +3,11 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-	     <link rel="stylesheet" href="plugins/wangEditor/wangEditor.css" />
+	          <link rel="stylesheet" href="/plugins/wangEditor/wangEditor-1.3.12.css" />
 			<script type="text/javascript" src="js/public.js" ></script>
-			<script src="plugins/wangEditor/wangEditor.js"></script>
+			<script src="/plugins/wangEditor/wangEditor-1.3.12.js"></script>
+			<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 		<script>
 		var editor
 			 $(function(){
@@ -16,6 +18,9 @@
 			 		$("#hidden_id").val(data.id);
 			 	$("#title").val(data.name);
 			 	$("#editorC").val(data.content);
+			 	
+			 	
+			 	
 			 	
 			 	$("#apiTypeSelect").find("option").each(function(){
 			 		if($(this).data("type")==data.type){
@@ -30,10 +35,30 @@
 			 	
 			 	
 			 	
-			 		    var E = window.wangEditor
+				$('pre code').each(function(i, block) {
+	    		hljs.highlightBlock(block);
+	  	});
+			 	
+			 	
+			 	$("body").height($(window).height());
+			 	
+			 	
+			 		/*    var E = window.wangEditor
         editor = new E('#toolbar')  // 两个参数也可以传入 elem 对象，class 选择器
-        editor.create();
-       editor.txt.html(data.content);
+        editor.create();*/
+        editor=$("#toolbar").wangEditor({
+        	'menuConfig': [
+    ['viewSourceCode'],
+    ['bold', 'underline', 'italic', 'foreColor', 'backgroundColor', 'strikethrough'],
+    ['blockquote', 'fontFamily', 'fontSize', 'setHead', 'list', 'justify'],
+    ['createLink', 'unLink', 'insertTable'],
+    ['insertImage', 'insertVideo', 'insertLocation','insertCode'],
+    ['mobilePreView', 'undo', 'redo', 'fullScreen']
+]
+        	
+        	
+        });
+      editor.html(data.content);
    	$.post("/getTopMenus",function(res){
    		if(res.length>0){
    			$.each(res,function(i,v){
@@ -51,7 +76,7 @@
 			 })
 			 
 			 function edit(){
-			 	var content=editor.txt.html();
+			 	var content=$("#toolbar").val();
 			 	$("#editorC").val(content);
 			 	$.get("/updateDoc",$("form").serialize(),function(res){
 			 		
@@ -102,11 +127,10 @@
    </div>
    <div class="form-group">
    	<input type="hidden" name="content"  id="editorC"/>
-   	 <label for="name" class="col-md-2 col-md-offset-1 control-label">文档内容</label>
-			<div id="toolbar" class="col-md-8" >
+   	   <textarea id="toolbar" class="col-md-8" style="height:400px; max-height:600px;">
 				
 				
-			</div>
+			</textarea>	
 				
 		</div>
 		 <div class="form-group">

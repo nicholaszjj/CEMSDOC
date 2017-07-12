@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title></title>
 		<script type="text/javascript" src="js/public.js" ></script>
-
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -20,7 +21,9 @@
     	var flag="<%=flag%>";
     	$(function(){
     		
-    	
+    	    $('pre code').each(function(i, block) {
+	    		hljs.highlightBlock(block);
+	    		});
     		$.post("/getDocs?flag="+flag,function(res){
          	var left_html="";
          	var right_html="";
