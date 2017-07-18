@@ -5,6 +5,45 @@
 		<title></title>
 			<script type="text/javascript" src="js/public.js" ></script>
 		<script>
+			
+			$(document).ready(function(){
+				/*上传文件*/
+        $("#upload").click(function(){
+            //do something
+            var file = $("#photo")[0].files;
+            //上次修改时间
+            console.log("文件上次修改时间"+file[0].lastModifiedDate);
+            //名称
+            console.log("文件名称"+file[0].name);
+            //大小 字节
+            console.log("文件大小"+file[0].size);
+            //类型
+            console.log("文件类型"+file[0].type);
+            //创建FormData对象
+            var data = new FormData();
+            //为FormData对象添加数据
+            $.each(file, function(i, file) {
+                data.append('upload_file', file);
+            });
+            $.ajax({
+                data: data,
+                url: '/uploadDoc',
+                type:"post",
+                dataType: 'JSON',
+                contentType: false,    //不可缺
+                processData: false,    //不可缺
+                success: function(data){
+                    console.log(data);
+                    alert("上传成功！");
+                },
+                error: function(err){
+                    console.log('error: ' + err);
+                }
+            });
+        })
+				
+				
+			})
 		
 	
 			 </script>
@@ -12,12 +51,9 @@
 	
 	<body>
 	
-		<form  method='post'   action="/uploadDoc" enctype='multipart/form-data'>
-			
-			<input  name="image"  type="file"  />
-			
-			<button type="submit">提交</button>
-		</form>
+	<input type="file" id="photo">
+
+<button id="upload">上传</button>
 
 	</body>
 </html>

@@ -3,9 +3,7 @@
  */
 
 var uploadDoc=function(req,res,next){
-	
-	console.log(req.body);
-	  console.log(req.files);
+     res.json({"result":{message:"文件上传成功!"}});
 	
 }
 
