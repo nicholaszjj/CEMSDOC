@@ -6,13 +6,13 @@ var express = require('express')
    
 var app = express();
 // all environments
-app.set('port', process.env.PORT ||2000);
+app.set('port', process.env.PORT ||3000);
 app.set('views', __dirname + '/views');
 app.engine('.html', require('ejs').__express);  
 app.set('view engine', 'html'); 
 app.use(express.favicon());
 app.use(express.logger('dev'));
-app.use(express.bodyParser({uploadDir:"public/docs", keepExtensions : true, limit:100000000, defer:true }));
+app.use(express.bodyParser({uploadDir:"public/temp", keepExtensions : true, limit:100000000, defer:true }));
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
@@ -34,3 +34,5 @@ for(var i in files){
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+

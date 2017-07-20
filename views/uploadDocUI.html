@@ -51,9 +51,13 @@
 	
 	<body>
 	
-	<input type="file" id="photo">
+  <form action="/uploadDoc" method="post" enctype='multipart/form-data'  >
+    <label for="resource">上传文档</label>
+    <input type="file" id="resource" name="resource">
+    <button type="submit">新建任务</button>
+  </form>
 
-<button id="upload">上传</button>
+ <!-- <a href="download/kkk">下载文件</a>-->
 
 	</body>
 </html>
