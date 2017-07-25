@@ -5,59 +5,115 @@
 		<title></title>
 			<script type="text/javascript" src="js/public.js" ></script>
 		<script>
-			
-			$(document).ready(function(){
-				/*上传文件*/
-        $("#upload").click(function(){
-            //do something
-            var file = $("#photo")[0].files;
-            //上次修改时间
-            console.log("文件上次修改时间"+file[0].lastModifiedDate);
-            //名称
-            console.log("文件名称"+file[0].name);
-            //大小 字节
-            console.log("文件大小"+file[0].size);
-            //类型
-            console.log("文件类型"+file[0].type);
-            //创建FormData对象
-            var data = new FormData();
-            //为FormData对象添加数据
-            $.each(file, function(i, file) {
-                data.append('upload_file', file);
-            });
-            $.ajax({
-                data: data,
-                url: '/uploadDoc',
-                type:"post",
-                dataType: 'JSON',
-                contentType: false,    //不可缺
-                processData: false,    //不可缺
-                success: function(data){
-                    console.log(data);
-                    alert("上传成功！");
-                },
-                error: function(err){
-                    console.log('error: ' + err);
-                }
-            });
-        })
+			$(function(){
 				
+			initUploadDocList();
+			
+			$("#uploadDocList_ul").on("click",".fa-download",function(){
+				var filename=$(this).parents("li").text();
+				$.post("/downloadDoc",{filename:$.trim(filename)},function(res){
+					/*layer.msg(res);*/
+					
+				})
 				
 			})
-		
+			$("#uploadDocList_ul").on("click",".fa-remove",function(){
+				var path=$(this).parents("li").text();
+				$.post("/removeDoc",{path:$.trim(path)},function(res){
+					if(res=="success")
+					initUploadDocList();
+				})
+				
+			})	
+			})
+
+function sub(){
+	
+    var data = new FormData($('#addForm')[0]);  //获取表单内容
+
+    ajaxFormPost("/uploadDoc",data,function(data){  //ajax提交表单
+        console.log("multiparty处理结果:",data);
+
+        layer.msg(data);
+          initUploadDocList();
+    });
+}
+
+function initUploadDocList(){
+	
+	       
+	
+		$.post("/getUploadDocList",function(res){
+					var html="";
+					$.each(res,function(i,v){
+						html+="<li class='list-group-item'>"+v+" <span class='badge'><i class='fa fa-download'></i></span><span class='badge'><i class='fa fa-remove'></i></span></li>"
+						
+					})
+					$("#uploadDocList_ul").find("li").remove();
+					$("#uploadDocList_ul").append(html);
+				})
+	
+	
+}
+
+
+
+//ajax Post方法封装
+function ajaxFormPost(url,formData,callBack){
+    $.ajax({
+        type:'POST',
+        dataType:'text',
+        processData: false,  // 告诉JSLite不要去处理发送的数据
+        contentType: false,   // 告诉JSLite不要去设置Content-Type请求头
+        data:formData,
+        url:url,
+        success:function(data){
+            callBack(data);
+        },
+        error:function(data){
+            console.log('error:',data)
+            callBack(data);
+        }
+    });
+}
+
+	function uploadDoc(){
+		layer.open({
+  type: 1,
+  shade: false,
+  title: false, //不显示标题
+  content: $('#addForm'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+  cancel: function(){
+   /* layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', {time: 5000, icon:6});*/
+  }
+});
+	
+	}
 	
 			 </script>
 	</head>
 	
 	<body>
+	    <div class="container top">
+	    	<a  class="btn btn-primary" onclick="uploadDoc()">上传文档</a>
+		</div>
+		<div class="container">
+			<ul id="uploadDocList_ul" class="list-group">
 	
-  <form action="/uploadDoc" method="post" enctype='multipart/form-data'  >
-    <label for="resource">上传文档</label>
-    <input type="file" id="resource" name="resource">
-    <button type="submit">新建任务</button>
-  </form>
-
- <!-- <a href="download/kkk">下载文件</a>-->
+		  </ul>
+		</div>
+    
+     
+     
 
 	</body>
+	
+	 <form  id="addForm" enctype='multipart/form-data'style="display: none;" >
+  	<fieldset>
+  		<legend>文档上传</legend>
+ <input type="file" name="resource"  multiple="multiple">
+    <input type="button" onclick="sub()" value="上传"/>
+    </fieldset>
+  </form>
+	
 </html>

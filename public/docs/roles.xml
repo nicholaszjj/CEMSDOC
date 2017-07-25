@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<role id="72a923818a9d41b082d3ceecdb380d26" name="com.role.superadmin" type="SUPERADMIN" flag="SYSTEM">
+        <privileges flag="all"/>
+    </role>
+	<role flag="SYSTEM" id="2883720338d54b00aa87768e20ff3c9e" name="com.role.admin" type="ADMINISTRATOR">
+	<privileges flag="all"/>
+  	</role>
+  	<role flag="SYSTEM" id="9c083a41c19b4cf9b809ca2ac7daa23a" name="com.role.auditor" type="AUDITOR">
+	  <privileges flag="all"/>
+  	</role>
+  	<role flag="SYSTEM" id="6b655cdc38b1476aabcc4933e2459a04" name="com.role.assessor" type="ASSESSOR">
+	  <privileges flag="all"/>
+  	</role>
+  	<role id="951fa6d68ea442ddba1f7af6acd93997" name="com.role.custom" type="CUSTOM" flag="SYSTEM">
+		<privileges flag="all"/>
+	</role>
+</root>
