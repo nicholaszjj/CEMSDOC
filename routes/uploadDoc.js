@@ -24,7 +24,23 @@ var uploadDoc=function(req,res){
               changeNameArray.forEach(function(value,index,arry){
             	var changeName=value.originalFilename;
             	var  path=value.path;
+
             	 myfs.renameSync(path,"public/docs/"+changeName);
+             	//删除临时文件
+            	 var folder_exists = myfs.existsSync("public/temp");
+            	  
+            	  if(folder_exists == true)
+            	  {
+            	      var dirList = myfs.readdirSync("public/temp");
+            	  
+            	      dirList.forEach(function(fileName)
+            	      {
+            	    	  myfs.unlinkSync("public/temp/" + fileName);
+            	     });
+            	 }
+            	 
+            	 
+            	 
               })
               
             

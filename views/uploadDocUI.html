@@ -11,10 +11,15 @@
 			
 			$("#uploadDocList_ul").on("click",".fa-download",function(){
 				var filename=$(this).parents("li").text();
-				$.post("/downloadDoc",{filename:$.trim(filename)},function(res){
+				$("#filename").val($.trim(filename));
+				$form=$("#downloadForm");
+					$form.attr("method","POST");
+				$form.attr("action","/downloadDoc");
+				$form.submit();
+				/*$.post("/downloadDoc",{filename:$.trim(filename)},function(res){
 					/*layer.msg(res);*/
 					
-				})
+				/*})*/
 				
 			})
 			$("#uploadDocList_ul").on("click",".fa-remove",function(){
@@ -28,13 +33,13 @@
 			})
 
 function sub(){
-	
     var data = new FormData($('#addForm')[0]);  //获取表单内容
 
     ajaxFormPost("/uploadDoc",data,function(data){  //ajax提交表单
         console.log("multiparty处理结果:",data);
 
-        layer.msg(data);
+        layer.msg(data); //获取窗口索引
+        layer.closeAll();
           initUploadDocList();
     });
 }
@@ -45,10 +50,16 @@ function initUploadDocList(){
 	
 		$.post("/getUploadDocList",function(res){
 					var html="";
-					$.each(res,function(i,v){
+					if(res.length>0){
+						$(".alert").hide();
+							$.each(res,function(i,v){
 						html+="<li class='list-group-item'>"+v+" <span class='badge'><i class='fa fa-download'></i></span><span class='badge'><i class='fa fa-remove'></i></span></li>"
 						
 					})
+					}else{
+						$(".alert").show();
+					}
+				
 					$("#uploadDocList_ul").find("li").remove();
 					$("#uploadDocList_ul").append(html);
 				})
@@ -84,13 +95,21 @@ function ajaxFormPost(url,formData,callBack){
   title: false, //不显示标题
   content: $('#addForm'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
   cancel: function(){
-   /* layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', {time: 5000, icon:6});*/
   }
 });
 	
 	}
 	
 			 </script>
+			 
+		<style>
+			
+			.top{
+				padding:10px;
+			}
+			
+		</style>	 
+			 
 	</head>
 	
 	<body>
@@ -99,21 +118,37 @@ function ajaxFormPost(url,formData,callBack){
 		</div>
 		<div class="container">
 			<ul id="uploadDocList_ul" class="list-group">
-	
+	           <div class="alert alert-warning">
+<!--               <a href="#" class="close" data-dismiss="alert">
+        &times;
+               </a>-->
+              <strong>警告！</strong>暂未上传任何文档
+           </div>
 		  </ul>
 		</div>
     
      
-     
+     <form id="downloadForm" style="display:none">
+		<input name="filename" id="filename" />
+		
+	</form>
 
 	</body>
 	
-	 <form  id="addForm" enctype='multipart/form-data'style="display: none;" >
+	 <form  id="addForm" enctype='multipart/form-data' style="display: none;padding:20px;" >
   	<fieldset>
   		<legend>文档上传</legend>
- <input type="file" name="resource"  multiple="multiple">
-    <input type="button" onclick="sub()" value="上传"/>
+  		<div  class="list-group">
+  			<li class="list-group-item">
+  				 <input type="file" name="resource"  multiple="multiple">
+  			</li>
+  			<li class="list-group-item">
+  				<input type="button" class="btn btn-primary"   onclick="sub()" value="上传"/>
+  			</li>
+  		</div>
+
     </fieldset>
   </form>
+	
 	
 </html>
