@@ -24,7 +24,7 @@ if ('development' == app.get('env')) {
 //路由
 var files=fs.readdirSync("./routes");
 for(var i in files){
-	var name=files[i].replace(".js","")
+	var name=files[i].replace(".js","");
 	app.use("/"+name, require('./routes/'+name));
 	
 }

@@ -14,7 +14,7 @@ var downloadDoc = function(req, res){
 			   'Content-Disposition': 'attachment; filename='+filename,
 			   'Content-Length': stats.size
 			  });
-			  fs.createReadStream(file).setEncoding('UTF8').pipe(res);
+			  fs.createReadStream(file).setEncoding('utf8').pipe(res);
 			  
 		 } else {
 			 res.set({  
