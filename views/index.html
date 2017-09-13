@@ -32,9 +32,9 @@
     	var html="";
     	$.each(res, function(i,v) {
     		if(v.flag=="0"){
-    			html+='<li class="active" data-type="'+v.flag+'"><a  href="javascript:;"  ><i class="fa fa-'+v.icon+'"></i>'+v.name+'</a></li> '
+    			html+='<li class="active" data-type="'+v.flag+'"><a  href="javascript:;"  ><i class="fa fa-'+v.icon+'"></i> '+v.name+'</a></li> '
     		}else{
-    		  html+='<li data-type="'+v.flag+'"><a  href="javascript:;"  ><i class="fa fa-'+v.icon+'"></i>'+v.name+'</a></li> '
+    		  html+='<li data-type="'+v.flag+'"><a  href="javascript:;"  ><i class="fa fa-'+v.icon+'"></i> '+v.name+'</a></li> '
     	}
     		
     		});
@@ -73,7 +73,7 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand logo" href="javascript:;">
-                <span class="fa fa-cloud-upload"></span><%=title%></a>
+                <span class="fa fa-address-book-o"></span><%=title%></a>
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav" id="centerNav">      
